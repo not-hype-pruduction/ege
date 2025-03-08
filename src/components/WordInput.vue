@@ -1,6 +1,6 @@
 <template>
         <div class="word-input">
-          <div class="input-wrapper">
+          <div v-if="inputMode === 'text'" class="input-wrapper">
             <input
               type="text"
               v-model="userInput"
@@ -10,55 +10,77 @@
             />
             <button @click="checkAnswer">Проверить</button>
           </div>
+          <div v-else class="buttons-wrapper">
+            <button
+              v-for="(char, index) in vowels"
+              :key="index"
+              @click="checkLetter(char)"
+            >
+              {{ char }}
+            </button>
+          </div>
           <transition name="slide-fade">
             <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
           </transition>
         </div>
       </template>
 
-  <script>
-  export default {
-    props: {
-      correctWord: {
-        type: String,
-        required: true
-      }
-    },
-    data() {
-      return {
-        userInput: '',
-        errorMessage: '',
-        showError: false
-      }
-    },
-    methods: {
-      checkAnswer() {
-        this.$emit('attempt');
-
-        // Используем trim() для удаления пробелов в начале и конце строки
-        if (this.userInput.trim().toLowerCase() === this.correctWord.toLowerCase()) {
-          this.$emit('correct-answer');
-          this.userInput = '';
-          this.errorMessage = '';
-        } else {
-          this.errorMessage = 'Неверно. Попробуйте еще раз.';
-          this.showErrorAnimation();
+      <script>
+      export default {
+        props: {
+          correctWord: {
+            type: String,
+            required: true
+          },
+          inputMode: {
+            type: String,
+            default: 'text' // 'text' или 'letter'
+          }
+        },
+        data() {
+          return {
+            userInput: '',
+            errorMessage: '',
+            showError: false,
+            vowels: 'аеёиоуыэюя'.split('')
+          }
+        },
+        methods: {
+          checkAnswer() {
+            this.$emit('attempt');
+            if (this.userInput.trim().toLowerCase() === this.correctWord.toLowerCase()) {
+              this.$emit('correct-answer');
+              this.userInput = '';
+              this.errorMessage = '';
+            } else {
+              this.errorMessage = 'Неверно. Попробуйте еще раз.';
+              this.showErrorAnimation();
+            }
+          },
+          checkLetter(char) {
+            this.$emit('attempt');
+            const wordWithGap = this.correctWord.replace('_', char);
+            if (wordWithGap.toLowerCase() === this.correctWord.toLowerCase()) {
+              this.$emit('correct-answer');
+              this.errorMessage = '';
+            } else {
+              this.errorMessage = 'Неверно. Попробуйте еще раз.';
+            }
+          },
+          showErrorAnimation() {
+            this.showError = true;
+            setTimeout(() => {
+              this.showError = false;
+            }, 500);
+          }
+        },
+        watch: {
+          correctWord() {
+            this.errorMessage = '';
+          }
         }
-      },
-      showErrorAnimation() {
-        this.showError = true;
-        setTimeout(() => {
-          this.showError = false;
-        }, 500);
       }
-    },
-    watch: {
-      correctWord() {
-        this.errorMessage = '';
-      }
-    }
-  }
-  </script>
+      </script>
 
       <style scoped>
       .word-input {
@@ -142,6 +164,7 @@
         transform: translateY(-10px);
         opacity: 0;
       }
+
       @media (max-width: 600px) {
         .input-wrapper {
           flex-direction: column;
