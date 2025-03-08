@@ -47,5 +47,5 @@ jobs:
             docker stop rege-app || true
             docker rm rege-app || true
             echo "Running new container..."
-            docker run -d --name my-vue-app -p 3000:3000 ilshz/rege-app:latest
+            docker run -d --name rege-app -p 3000:3000 ilshz/rege-app:latest
 
