@@ -62,12 +62,14 @@
       <style scoped>
       .word-input {
         margin: 30px 0;
+        width: 100%;
       }
 
       .input-wrapper {
         display: flex;
         justify-content: center;
         gap: 10px;
+        max-width: 100%;
       }
 
       input {
@@ -76,8 +78,10 @@
         border-radius: 8px;
         border: 2px solid #ddd;
         width: 60%;
+        max-width: 300px;
         transition: all 0.3s ease;
         font-family: 'Montserrat', sans-serif;
+        box-sizing: border-box;
       }
 
       input:focus {
@@ -103,6 +107,7 @@
         transition: all 0.3s ease;
         font-family: 'Montserrat', sans-serif;
         font-weight: 600;
+        white-space: nowrap;
       }
 
       button:hover {
@@ -135,5 +140,25 @@
       .slide-fade-enter-from, .slide-fade-leave-to {
         transform: translateY(-10px);
         opacity: 0;
+      }
+      @media (max-width: 600px) {
+        .input-wrapper {
+          flex-direction: column;
+          gap: 15px;
+          width: 100%;
+        }
+
+        input {
+          width: 100%;
+          max-width: 100%;
+          font-size: 16px;
+          padding: 12px;
+        }
+
+        button {
+          width: 100%;
+          padding: 12px;
+          font-size: 16px;
+        }
       }
       </style>

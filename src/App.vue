@@ -109,6 +109,8 @@
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border-radius: 15px;
     background: linear-gradient(145deg, #ffffff, #f5f8ff);
+    box-sizing: border-box;
+    overflow: hidden;
   }
 
   .title {
@@ -174,5 +176,33 @@
   @keyframes bounce-out {
     0% { transform: translate(-50%, -50%) scale(1); }
     100% { transform: translate(-50%, -50%) scale(0); }
+  }
+  @media (max-width: 768px) {
+    #app {
+      margin: 20px auto;
+      padding: 20px;
+      max-width: 95%;
+      width: 95%;
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .success-message {
+      font-size: 20px;
+      padding: 12px 24px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    #app {
+      padding: 15px;
+      margin: 10px auto;
+    }
+
+    .title {
+      font-size: 1.3rem;
+    }
   }
   </style>

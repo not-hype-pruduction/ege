@@ -116,4 +116,30 @@
         opacity: 0;
         transform: translateY(20px);
       }
+      @media (max-width: 600px) {
+        .game-stats {
+          margin: 20px 0;
+          padding: 15px;
+        }
+
+        .stat-item {
+          margin-bottom: 8px;
+          padding: 6px 0;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .stat-label {
+          margin-bottom: 5px;
+        }
+
+        .stat-value {
+          font-size: 18px;
+        }
+
+        .accuracy-bar {
+          width: 80px;
+          height: 6px;
+        }
+      }
       </style>
