@@ -16,48 +16,49 @@
         </div>
       </template>
 
-      <script>
-      export default {
-        props: {
-          correctWord: {
-            type: String,
-            required: true
-          }
-        },
-        data() {
-          return {
-            userInput: '',
-            errorMessage: '',
-            showError: false
-          }
-        },
-        methods: {
-          checkAnswer() {
-            this.$emit('attempt');
-
-            if (this.userInput.toLowerCase() === this.correctWord.toLowerCase()) {
-              this.$emit('correct-answer');
-              this.userInput = '';
-              this.errorMessage = '';
-            } else {
-              this.errorMessage = 'Неверно. Попробуйте еще раз.';
-              this.showErrorAnimation();
-            }
-          },
-          showErrorAnimation() {
-            this.showError = true;
-            setTimeout(() => {
-              this.showError = false;
-            }, 500);
-          }
-        },
-        watch: {
-          correctWord() {
-            this.errorMessage = '';
-          }
-        }
+  <script>
+  export default {
+    props: {
+      correctWord: {
+        type: String,
+        required: true
       }
-      </script>
+    },
+    data() {
+      return {
+        userInput: '',
+        errorMessage: '',
+        showError: false
+      }
+    },
+    methods: {
+      checkAnswer() {
+        this.$emit('attempt');
+
+        // Используем trim() для удаления пробелов в начале и конце строки
+        if (this.userInput.trim().toLowerCase() === this.correctWord.toLowerCase()) {
+          this.$emit('correct-answer');
+          this.userInput = '';
+          this.errorMessage = '';
+        } else {
+          this.errorMessage = 'Неверно. Попробуйте еще раз.';
+          this.showErrorAnimation();
+        }
+      },
+      showErrorAnimation() {
+        this.showError = true;
+        setTimeout(() => {
+          this.showError = false;
+        }, 500);
+      }
+    },
+    watch: {
+      correctWord() {
+        this.errorMessage = '';
+      }
+    }
+  }
+  </script>
 
       <style scoped>
       .word-input {
