@@ -60,10 +60,11 @@
       </transition>
 
       <WordInput
-        :correctWord="currentWord"
-        :inputMode="inputMode"
-        @correct-answer="getNextWord"
-        @attempt="incrementAttempts"
+          :correctWord="wordWithGap"
+          :inputMode="inputMode"
+          :originalWord="currentWord"
+          @attempt="countAttempt"
+          @correct-answer="handleCorrectAnswer"
       />
 
       <GameStats
@@ -223,6 +224,39 @@ export default {
     },
     incrementAttempts() {
       this.totalAttempts++;
+    },
+    checkLetter(char) {
+      console.log('Нажата буква:', char);
+      this.$emit('attempt');
+
+      // Находим позицию пропуска в слове
+      const gapIndex = this.correctWord.indexOf('_');
+      console.log('Индекс пропуска:', gapIndex);
+
+      // Используем проп originalWord
+      if (this.originalWord && gapIndex >= 0 && gapIndex < this.originalWord.length) {
+        const correctChar = this.originalWord[gapIndex];
+        console.log('Правильная буква:', correctChar, 'Выбранная буква:', char);
+
+        if (char.toLowerCase() === correctChar.toLowerCase()) {
+          console.log('Буква верна! Отправляем событие correct-answer');
+          this.$emit('correct-answer');
+          this.errorMessage = '';
+        } else {
+          this.errorMessage = 'Неверно. Попробуйте еще раз.';
+          this.showErrorAnimation();
+        }
+      } else {
+        console.error('Проблема с проверкой:', {
+          originalWord: this.originalWord,
+          gapIndex: gapIndex,
+          correctWord: this.correctWord
+        });
+        this.errorMessage = 'Ошибка проверки. Попробуйте другое слово.';
+      }
+    },
+    handleCorrectAnswer() {
+      this.getNextWord();
     },
     showSuccessAnimation() {
       this.showSuccess = true;

@@ -2,11 +2,11 @@
   <div class="accent-input">
     <div class="buttons-wrapper">
       <button
-        v-for="(char, index) in wordChars"
-        :key="index"
-        @click="checkAccent(index)"
-        :class="{ 'vowel': isVowel(char) }"
-        :disabled="!isVowel(char)"
+          v-for="(char, index) in wordChars"
+          :key="index"
+          @click="checkAccent(index)"
+          :class="{ 'vowel': isVowel(char) }"
+          :disabled="!isVowel(char)"
       >
         {{ char }}
       </button>
@@ -34,6 +34,15 @@ export default {
   computed: {
     wordChars() {
       return this.word.toLowerCase().split('');
+    },
+    // Найти индекс буквы с ударением (с заглавной буквы)
+    accentIndex() {
+      for (let i = 0; i < this.word.length; i++) {
+        if (this.word[i] === this.word[i].toUpperCase() && this.isVowel(this.word[i])) {
+          return i;
+        }
+      }
+      return -1;
     }
   },
   methods: {
@@ -43,8 +52,8 @@ export default {
     checkAccent(index) {
       this.$emit('attempt');
 
-      // Проверяем, если буква является правильным ударением (в слове с большой буквы)
-      if (this.word[index] === this.word[index].toUpperCase() && this.isVowel(this.word[index])) {
+      // Сравниваем с правильным индексом ударной гласной
+      if (index === this.accentIndex) {
         this.$emit('correct-answer');
         this.errorMessage = '';
       } else {
@@ -70,30 +79,34 @@ export default {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 8px;
   margin-bottom: 15px;
 }
 
 button {
-  min-width: 40px;
-  height: 40px;
-  font-size: 18px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  background-color: #f9f9f9;
+  min-width: 45px;
+  height: 45px;
+  font-size: 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #f0f0f0;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: 'Montserrat', sans-serif;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 button.vowel {
-  background: linear-gradient(135deg, #f9f9f9, #e8f4ff);
-  border-color: #cce0ff;
+  background: linear-gradient(135deg, #f8f9ff, #e1e9ff);
+  border: 1px solid #d4e0ff;
+  color: #4a6baf;
+  font-weight: 600;
 }
 
 button.vowel:hover {
-  background: linear-gradient(135deg, #e8f4ff, #cce0ff);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #e1e9ff, #c8d8ff);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 button:disabled {
@@ -101,13 +114,23 @@ button:disabled {
   cursor: not-allowed;
   background: #eee;
   transform: none;
+  box-shadow: none;
 }
 
 .error {
   color: #e74c3c;
   margin-top: 10px;
   font-weight: 500;
-  padding: 5px;
+  padding: 8px 15px;
+  background-color: #ffebee;
+  border-radius: 6px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
 }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
@@ -121,21 +144,21 @@ button:disabled {
 
 @media (max-width: 600px) {
   button {
-    min-width: 35px;
-    height: 35px;
-    font-size: 16px;
+    min-width: 38px;
+    height: 38px;
+    font-size: 17px;
   }
 }
 
 @media (max-width: 400px) {
   .buttons-wrapper {
-    gap: 3px;
+    gap: 4px;
   }
 
   button {
-    min-width: 30px;
-    height: 30px;
-    font-size: 14px;
+    min-width: 32px;
+    height: 32px;
+    font-size: 15px;
   }
 }
 </style>
