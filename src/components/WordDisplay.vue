@@ -31,13 +31,13 @@
   margin: 20px 0;
   padding: 15px;
   border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  background-color: var(--game-bg);
+  box-shadow: 0 4px 10px var(--shadow);
   transition: all 0.3s ease;
 }
 
 .word-display h2 {
-  color: #555;
+  color: var(--text-color);
   margin-bottom: 15px;
   font-weight: 600;
   font-size: 1.4rem;
@@ -47,24 +47,15 @@
   font-size: 32px;
   letter-spacing: 4px;
   font-weight: bold;
-  color: #444;
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.word-with-gap span {
-  display: inline-block;
-  margin: 0 3px;
-  transition: all 0.3s ease;
-}
-
 .highlight {
-  color: #3a7bd5;
-  border-bottom: 3px solid #3a7bd5;
-  animation: pulse 1.5s infinite;
-  padding: 0 5px;
-  font-size: 34px;
+  color: var(--accent-color);
+  border-bottom: 3px solid var(--accent-color);
 }
 
 @keyframes pulse {

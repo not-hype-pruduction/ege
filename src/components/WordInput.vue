@@ -59,12 +59,26 @@
           },
           checkLetter(char) {
             this.$emit('attempt');
-            const wordWithGap = this.correctWord.replace('_', char);
-            if (wordWithGap.toLowerCase() === this.correctWord.toLowerCase()) {
-              this.$emit('correct-answer');
-              this.errorMessage = '';
+
+            // Находим позицию пропуска в слове
+            const gapIndex = this.correctWord.indexOf('_');
+
+            // Получаем оригинальное слово из родительского компонента
+            const wordInParent = this.$parent.currentWord;
+
+            // Если букву можно определить из родительского компонента
+            if (wordInParent && gapIndex >= 0 && gapIndex < wordInParent.length) {
+              const correctChar = wordInParent[gapIndex];
+
+              if (char.toLowerCase() === correctChar.toLowerCase()) {
+                this.$emit('correct-answer');
+                this.errorMessage = '';
+              } else {
+                this.errorMessage = 'Неверно. Попробуйте еще раз.';
+                this.showErrorAnimation();
+              }
             } else {
-              this.errorMessage = 'Неверно. Попробуйте еще раз.';
+              this.errorMessage = 'Ошибка проверки. Попробуйте другое слово.';
             }
           },
           showErrorAnimation() {
